@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
 /// 정차하는 정류장의 정보를 담고 있는 개체입니다.
@@ -45,6 +46,40 @@ class Station {
     actualDistance = _actualRouteDistance.reduce(
       (element1, element2) => element1 + element2,
     );
+  }
+
+  
+
+  /// 남은 거리를 기준으로 현재 버스가 어디있는지 나타냅니다.
+  /// [percent]는 前정류장부터 現정류장까지 소요시간 / (소요시간-현재시간)을 나타냅니다.
+  LatLng currentPoint(double percent) {
+    // 남은 거리
+    double remainingDistance = actualDistance * percent;
+
+    for (final node in _actualRouteDistance.asMap().entries) {
+      if (remainingDistance - node.value < 0) {
+        // 방위각 계산
+        final radian = math.pi / 180;
+        final latitude1 = (route[node.key].latitude) * radian;
+        final latitude2 = (route[node.key + 1].latitude) * radian;
+        final relativeLongtitude =
+            (route[node.key].longitude - route[node.key + 1].longitude).abs() *
+            radian;
+
+        final x = math.sin(relativeLongtitude) * math.cos(latitude2);
+        final y =
+            math.cos(latitude1) * math.sin(latitude2) -
+            (math.sin(latitude1) *
+                math.cos(latitude2) *
+                math.cos(relativeLongtitude));
+        final initialBearing = math.atan2(x, y) * (180 / math.pi);
+        final compassBearing = (initialBearing + 360) % 360;
+
+        return route[node.key].offset(remainingDistance, compassBearing);
+      }
+      remainingDistance -= node.value;
+    }
+    return position;
   }
 
   @override
