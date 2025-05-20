@@ -1,13 +1,59 @@
 import 'dart:ui';
 
-class ThemeColor {
-/* Text Color */
-  static final primaryTextColor = const Color.fromARGB(255, 0, 0, 0);
-  static final secondaryTextColor = const Color.fromARGB(255, 217, 217, 217);
-  static final hightlightTextColor = const Color.fromARGB(255, 0, 112, 238);
-  static final finalTextColor = const Color.fromARGB(255, 255, 119, 0);
+import 'package:knu_inner_bus/constant/color.dart';
 
-  /* Background Color */
-  static final primaryBackgroundColor = const Color.fromARGB(255, 255, 255, 255);
-  static final shadowColor = const Color.fromARGB(255, 128, 128, 128);
+/* Kakao Map Page */
+class KakaoMapTextStyle {
+  static final title = TextStyle(
+    color: ThemeColor.primaryTextColor,
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    decoration: TextDecoration.none,
+  );
+  static final previousTitle = TextStyle(
+    color: ThemeColor.secondaryTextColor,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    decoration: TextDecoration.none,
+  );
+
+  static final currentTitle = TextStyle(
+    color: ThemeColor.hightlightTextColor,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    decoration: TextDecoration.none,
+  );
+  static final currentDescription = TextStyle(
+    color: ThemeColor.primaryTextColor,
+    fontSize: 14,
+    decoration: TextDecoration.none,
+  );
+
+  static final previous = TextStyle(
+    color: ThemeColor.secondaryTextColor,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    decoration: TextDecoration.none,
+  );
+  static final previousCount = TextStyle(
+    color: ThemeColor.secondaryTextColor,
+    fontSize: 14,
+    decoration: TextDecoration.none,
+  );
+  static final next = TextStyle(
+    color: ThemeColor.primaryTextColor,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    decoration: TextDecoration.none,
+  );
+  static final nextCount = TextStyle(
+    color: ThemeColor.primaryTextColor,
+    fontSize: 14,
+    decoration: TextDecoration.none,
+  );
+  static final finalCount = TextStyle(
+    color: ThemeColor.finalTextColor,
+    fontSize: 14,
+    decoration: TextDecoration.none,
+  );
 }
