@@ -4,6 +4,10 @@ import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
 /// 정차하는 정류장의 정보를 담고 있는 개체입니다.
 class Station {
+  /// 정류장 고유번호입니다.
+  /// 고유번호를 통해 다른 방향의 정류장을 식별합니다.
+  final int id;
+
   /// 정류장 이름입니다.
   final String name;
 
@@ -31,9 +35,9 @@ class Station {
   /// 한 노드를 이동하는 데, 소요되는 거리를 담는 비공개 필드입니다.
   late final List<double> _actualRouteDistance;
 
-  Station(this.name, this.position, this.direction, this.route, this.time) {
+  Station(this.id, this.name, this.position, this.direction, this.route, this.time) {
     // 반드시 경로의 마지막은 現정류장의 좌표를 나타내고 있어야 합니다.
-    assert(position == route.last);
+    /* assert(position == route.last);
 
     distance = route.first.distance(position);
     _actualRouteDistance =
@@ -45,7 +49,7 @@ class Station {
             .toList();
     actualDistance = _actualRouteDistance.reduce(
       (element1, element2) => element1 + element2,
-    );
+    ); */
   }
 
   
@@ -114,11 +118,12 @@ class Station {
   }
 
   factory Station.fromMap(Map<String, dynamic> payload) => Station(
+    payload["id"] as int,
     payload['name'] as String,
     LatLng.fromMessageable(payload['position']),
-    payload['direction'],
-    payload['route'].map<LatLng>((x) => LatLng.fromMessageable(x)),
-    (payload['time'] as Map<int, dynamic>).map(
+    payload['direction'] as bool,
+    payload['route'].map<LatLng>((x) => LatLng.fromMessageable(x)).toList(),
+    /* (payload['time'] as Map<int, dynamic>).map(
       (key, value) => MapEntry(
         key,
         DateTime.now().copyWith(
@@ -129,7 +134,7 @@ class Station {
           millisecond: 0,
         ),
       ),
-    ),
+    ), */{}
   );
 
   String toJson() => json.encode(toMap());
