@@ -1,23 +1,133 @@
 [
     {
+        "id": 1,
         "name": "새롬관",
         "position": {
-            "latitude": 0,
-            "longitude": 0
+            "latitude": 37.865778595531175,
+            "longitude": 127.74243051420254
         },
         "route": [],
-        "time": {
-            "1": 510,
-            "2": 570,
-            "3": 600,
-            "4": 630,
-            "5": 720,
-            "6": 780,
-            "7": 890,
-            "8": 960,
-            "9": 1050,
-            "10": 1080
-        },
+        "time": {},
         "direction": true
+    }, {
+        "id": 2,
+        "name": "미래도서관",
+        "position": {
+            "latitude": 37.86602599198071,
+            "longitude": 127.74869255224785
+        },
+        "route": [],
+        "time": {},
+        "direction": true
+    }, {
+        "id": 3,
+        "name": "동생대",
+        "position": {
+            "latitude": 37.86835046697925, 
+            "longitude": 127.74979668114653
+        },
+        "route": [],
+        "time": {},
+        "direction": true
+    }, {
+        "id": 4,
+        "name": "경영대 2호관",
+        "position": {
+            "latitude": 37.86968941888101, 
+            "longitude": 127.74606955033758
+        },
+        "route": [],
+        "time": {},
+        "direction": true
+    }, {
+        "id": 5,
+        "name": "미래광장",
+        "position": {
+            "latitude": 37.8705591574983,
+            "longitude": 127.74336450517711
+        },
+        "route": [],
+        "time": {},
+        "direction": true
+    }, {
+        "id": 6,
+        "name": "백록관",
+        "position": {
+            "latitude": 37.8688247037592, 
+            "longitude": 127.74159506006295
+        },
+        "route": [],
+        "time": {},
+        "direction": true
+    }, {
+        "id": 1,
+        "name": "새롬관",
+        "position": {
+            "latitude": 37.86611866814858,
+            "longitude": 127.74246058842292
+        },
+        "route": [],
+        "time": {},
+        "direction": false
+    }, {
+        "id": 6,
+        "name": "함인섭광장",
+        "position": {
+            "latitude": 37.86860447488516, 
+            "longitude": 127.74159073211202
+        },
+        "route": [],
+        "time": {},
+        "direction": false
+    }, {
+        "id": 5,
+        "name": "미래광장",
+        "position": {
+            "latitude": 37.8705029179203, 
+            "longitude": 127.74335703851081
+        },
+        "route": [],
+        "time": {},
+        "direction": false
+    }, {
+        "id": 4, 
+        "name": "글로벌경영관",
+        "position": {
+            "latitude": 37.86965291295824, 
+            "longitude": 127.74530956526908
+        },
+        "route": [],
+        "time": {},
+        "direction": false
+    }, {
+        "id": 3,
+        "name": "의생대",
+        "position": {
+            "latitude": 37.86826960043048, 
+            "longitude": 127.7499105342665
+        },
+        "route": [],
+        "time": {},
+        "direction": false
+    }, {
+        "id": 2,
+        "name": "미래도서관",
+        "position": {
+            "latitude": 37.86629826035538, 
+            "longitude": 127.74858125060128
+        },
+        "route": [],
+        "time": {},
+        "direction": false
+    }, {
+        "id": 1,
+        "name": "새롬관",
+        "position": {
+            "latitude": 37.86611866814858,
+            "longitude": 127.74246058842292
+        },
+        "route": [],
+        "time": {},
+        "direction": false
     }
 ]
