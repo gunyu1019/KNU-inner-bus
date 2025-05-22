@@ -1,0 +1,15 @@
+name: bus_config_generator
+description: "Generate configuration with station info, route path."
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  http: ^1.4.0
+
+dev_dependencies:
+  json_serializable: ^6.9.5
+  json_annotation: ^4.9.0
