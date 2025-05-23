@@ -40,7 +40,7 @@ class RouteSummary {
       RoutePosition.fromMap(map['origin'] as Map<String, dynamic>),
       RoutePosition.fromMap(map['destination'] as Map<String, dynamic>),
       List<RoutePosition>.from(
-        (map['waypoints'] as List<int>).map<RoutePosition>(
+        (map['waypoints'] as List<dynamic>).map<RoutePosition>(
           (x) => RoutePosition.fromMap(x as Map<String, dynamic>),
         ),
       ),
