@@ -30,7 +30,7 @@ class RouteSection {
           : null,
       map['roads'] != null
           ? List<RouteRoad>.from(
-            (map['roads'] as List<int>).map<RouteRoad?>(
+            (map['roads'] as List<dynamic>).map<RouteRoad?>(
               (x) => RouteRoad.fromMap(x as Map<String, dynamic>),
             ),
           )
