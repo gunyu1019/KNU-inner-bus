@@ -7,7 +7,7 @@ class RouteRoad {
   final int distance;
   final int duration;
   final double trafficSpeed;
-  final double trafficState;
+  final int trafficState;
   final List<double> vertexes;
 
   RouteRoad(
@@ -24,8 +24,8 @@ class RouteRoad {
       'name': name,
       'distance': distance,
       'duration': duration,
-      'trafficSpeed': trafficSpeed,
-      'trafficState': trafficState,
+      'traffic_speed': trafficSpeed,
+      'traffic_state': trafficState,
       'vertexes': vertexes,
     };
   }
@@ -35,9 +35,9 @@ class RouteRoad {
       map['name'] as String,
       map['distance'] as int,
       map['duration'] as int,
-      map['trafficSpeed'] as double,
-      map['trafficState'] as double,
-      List<double>.from(map['vertexes'] as List<double>),
+      map['traffic_speed'] as double,
+      map['traffic_state'] as int,
+      List<double>.from(map['vertexes'] as List<dynamic>),
     );
   }
 
