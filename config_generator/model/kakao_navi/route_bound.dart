@@ -10,19 +10,19 @@ class RouteBound {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'minX': minX,
-      'minY': minY,
-      'maxX': maxX,
-      'maxY': maxY,
+      'min_x': minX,
+      'min_y': minY,
+      'max_x': maxX,
+      'max_y': maxY,
     };
   }
 
   factory RouteBound.fromMap(Map<String, dynamic> map) {
     return RouteBound(
-      map['minX'] as double,
-      map['minY'] as double,
-      map['maxX'] as double,
-      map['maxY'] as double,
+      map['min_x'] as double,
+      map['min_y'] as double,
+      map['max_x'] as double,
+      map['max_y'] as double,
     );
   }
 
