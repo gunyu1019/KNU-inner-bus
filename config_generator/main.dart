@@ -2,11 +2,15 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
+
 import 'model/generator_latlng.dart';
 import 'model/generator_output.dart';
 import 'model/generator_station.dart';
+import 'model/kakao_navi/route_result.dart';
 
 Future<void> main() async {
+  final apiKey = "";
   final inputAssetPath = "input/";
   final outputAssetPath = "output/";
 
@@ -53,24 +57,51 @@ Future<void> main() async {
         .asMap()
         .map((k1, k2) => MapEntry(k1.toString(), k2));
 
-
     final route = <GeneratorLatLng>[];
     if (index > 0) {
       final prevStation = stations.elementAt(index - 1);
-      final url = Uri.https("apis-navi.kakaomobility.com", "/v1/directions", {
-        "origin": "${prevStation.position.longitude},${prevStation.position.latitude}",
-        "destination": "${station.position.longitude},${station.position.latitude}",
-        "waypoints": "",
+      final queries = <String, dynamic>{
+        "origin":
+            "${prevStation.position.longitude},${prevStation.position.latitude}",
+        "destination":
+            "${station.position.longitude},${station.position.latitude}",
+        "waypoints":
+            (waypoint.containsKey(index.toString())
+                ? waypoint[index.toString()]
+                    ?.map(
+                      (position) =>
+                          "${position.longitude},${position.latitude}",
+                    )
+                    .join("%7C")
+                : ""),
         "priority": "RECOMMEND",
-        "avoid": "null",
-        "roadevent": 2,
-        "alternatives": false,
-        "road_details": true,
-        "car_type": 3,
+        "roadevent": "2",
+        "alternatives": "false",
+        "road_details": "true",
+        "car_type": "3",
         "car_fuel": "GASOLINE",
-        "car_hipass": false,
-        "summary": false
-      });
+        "car_hipass": "false",
+        "summary": "false",
+      };
+      final url = Uri.https(
+        "apis-navi.kakaomobility.com",
+        "/v1/directions",
+        queries,
+      );
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "KakaoAK $apiKey",
+          "Content-Type": "application/json",
+        },
+      );
+      
+      if (response.statusCode == 200) {
+        final routeResult = RouteResult.fromJson(response.body);
+        for (var section in routeResult.routes[0].sections) {
+          section.roads!.map((e) => e.vertexesToLatLng()).forEach(route.addAll);
+        }
+      }
     }
     route.add(station.position);
 
