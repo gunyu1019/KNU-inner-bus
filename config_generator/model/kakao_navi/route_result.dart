@@ -11,15 +11,15 @@ class RouteResult {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'transId': transId,
+      'trans_id': transId,
       'routes': routes.map((x) => x.toMap()).toList(),
     };
   }
 
   factory RouteResult.fromMap(Map<String, dynamic> map) {
     return RouteResult(
-      map['transId'] as String,
-      List<Route>.from((map['routes'] as List<int>).map<Route>((x) => Route.fromMap(x as Map<String,dynamic>),),),
+      map['trans_id'] as String,
+      List<Route>.from((map['routes'] as List<dynamic>).map<Route>((x) => Route.fromMap(x as Map<String,dynamic>),),),
     );
   }
 
