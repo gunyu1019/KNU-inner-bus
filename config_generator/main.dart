@@ -103,7 +103,6 @@ Future<void> main() async {
         }
       }
     }
-    route.add(station.position);
 
     final resultElement = GeneratorOutput(
       station.id,
