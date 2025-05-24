@@ -20,7 +20,7 @@ class Station {
   /// 정류장의 시간표입니다.
   /// 키: 정류장에 정차하는 회차 (ex. 9회차에 정차하지 않으면 작성하지 않습니다.)
   /// 값: 정류장에 정차하는 시간
-  final Map<int, DateTime> time;
+  final Map<String, DateTime> time;
 
   /// 상행, 하행을 구분합니다.
   final bool direction;
@@ -35,24 +35,26 @@ class Station {
   /// 한 노드를 이동하는 데, 소요되는 거리를 담는 비공개 필드입니다.
   late final List<double> _actualRouteDistance;
 
-  Station(this.id, this.name, this.position, this.direction, this.route, this.time) {
-    // 반드시 경로의 마지막은 現정류장의 좌표를 나타내고 있어야 합니다.
-    /* assert(position == route.last);
-
-    distance = route.first.distance(position);
-    _actualRouteDistance =
+  Station(
+    this.id,
+    this.name,
+    this.position,
+    this.direction,
+    this.route,
+    this.time,
+  ) {
+    distance = route.isEmpty ? 0 : route.first.distance(position);
+    _actualRouteDistance = route.length > 1 ?
         route
             .sublist(0, route.length - 1)
             .asMap()
             .entries
             .map((element) => element.value.distance(route[element.key + 1]))
-            .toList();
+            .toList() : [0, 0];
     actualDistance = _actualRouteDistance.reduce(
       (element1, element2) => element1 + element2,
-    ); */
+    );
   }
-
-  
 
   /// 남은 거리를 기준으로 현재 버스가 어디있는지 나타냅니다.
   /// [percent]는 前정류장부터 現정류장까지 소요시간 / (소요시간-현재시간)을 나타냅니다.
@@ -95,7 +97,9 @@ class Station {
   bool operator ==(covariant Station other) {
     if (identical(this, other)) return true;
 
-    return other.name == name && other.position == position && other.direction == direction;
+    return other.name == name &&
+        other.position == position &&
+        other.direction == direction;
   }
 
   @override
@@ -122,19 +126,19 @@ class Station {
     payload['name'] as String,
     LatLng.fromMessageable(payload['position']),
     payload['direction'] as bool,
-    payload['route'].map<LatLng>((x) => LatLng.fromMessageable(x)).toList(),
-    /* (payload['time'] as Map<int, dynamic>).map(
+    payload['route'].map<LatLng>(LatLng.fromMessageable).toList(),
+    Map<String, dynamic>.from(payload['time']).map(
       (key, value) => MapEntry(
         key,
         DateTime.now().copyWith(
-          hour: value / 60,
+          hour: (value / 60).toInt(),
           minute: value % 60,
           second: 0,
           microsecond: 0,
           millisecond: 0,
         ),
       ),
-    ), */{}
+    ),
   );
 
   String toJson() => json.encode(toMap());
