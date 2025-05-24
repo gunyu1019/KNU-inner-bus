@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/model/route_path.dart';
@@ -33,6 +33,7 @@ class _MapPageState extends State<MapPage> {
     ),
     height: size.height,
     width: size.width,
+    child: const Text("테스트"),
   );
 
   @override
@@ -66,16 +67,24 @@ class _MapPageState extends State<MapPage> {
   Future<void> onMapReady(KakaoMapController controller) async {
     this.controller = controller;
 
+    /* await controller.moveCamera(CameraUpdate.fitMapPoints([
+      LatLng(37.87369656276904, 127.74234032102943),
+      LatLng(37.86069708242608, 127.74420063715208),
+    ], padding: 10)); */
+
+    // 선형에 맞게 경로를 생성합니다.
     final routeStyle = RouteStyle(
       Colors.blue,
       12,
       strokeColor: Colors.white,
       strokeWidth: 4,
     );
-    routeStyle.pattern = RoutePattern(
-      await KImage.fromWidget(Text("dummy"), Size(10, 10)),
-      10,
+    final patternSize = Size(30, 30);
+    final patternIcon = await KImage.fromWidget(
+      FaIcon(FontAwesomeIcons.caretUp, color: Colors.white),
+      patternSize,
     );
-    controller.routeLayer.addRoute(route!.getRoute, routeStyle);
+    routeStyle.pattern = RoutePattern(patternIcon, 10);
+    await controller.routeLayer.addRoute(route!.getRoute, routeStyle);
   }
 }
