@@ -67,10 +67,10 @@ class _MapPageState extends State<MapPage> {
   Future<void> onMapReady(KakaoMapController controller) async {
     this.controller = controller;
 
-    /* await controller.moveCamera(CameraUpdate.fitMapPoints([
+    await controller.moveCamera(CameraUpdate.fitMapPoints([
       LatLng(37.87369656276904, 127.74234032102943),
       LatLng(37.86069708242608, 127.74420063715208),
-    ], padding: 10)); */
+    ], padding: 10));
 
     // 선형에 맞게 경로를 생성합니다.
     final routeStyle = RouteStyle(
