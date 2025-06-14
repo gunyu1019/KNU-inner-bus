@@ -68,11 +68,6 @@ class _MapPageState extends State<MapPage> {
         .loadString("assets/config/station.json");
     final route = this.route = RoutePath.fromJson(rawData);
 
-    await controller.moveCamera(CameraUpdate.fitMapPoints([
-      LatLng(37.87369656276904, 127.74234032102943),
-      LatLng(37.86069708242608, 127.74420063715208),
-    ], padding: 10));
-    
     final routeColor = Color.from(alpha: 1.0, red: 0, green: .78, blue: .31);
 
     // 선형에 맞게 경로를 생성합니다.
@@ -90,6 +85,7 @@ class _MapPageState extends State<MapPage> {
     routeStyle.pattern = RoutePattern(patternIcon, 10);
     await controller.routeLayer.addRoute(route.getRoute, routeStyle);
 
+    // 교내 버스 정류장 아이콘을 추가합니다.
     final icon = await rootBundle.load("assets/image/station.png");
     final poiStyle1 = PoiStyle(
       icon: KImage.fromData(icon.buffer.asUint8List(), 22, 22),
@@ -106,5 +102,10 @@ class _MapPageState extends State<MapPage> {
         style: station.direction ? poiStyle1 : poiStyle2, 
       );
     }
+
+    /* await controller.moveCamera(CameraUpdate.fitMapPoints([
+      LatLng(37.87369656276904, 127.74234032102943),
+      LatLng(37.86069708242608, 127.74420063715208),
+    ], padding: 10)); Cause Exception in Web */
   }
 }
