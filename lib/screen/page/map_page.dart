@@ -19,9 +19,6 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    rootBundle
-        .loadString("assets/config/station.json")
-        .then((raw) => route = RoutePath.fromJson(raw));
   }
 
   Widget container(Size size) => Container(
@@ -67,24 +64,47 @@ class _MapPageState extends State<MapPage> {
   Future<void> onMapReady(KakaoMapController controller) async {
     this.controller = controller;
 
+    final rawData = await rootBundle
+        .loadString("assets/config/station.json");
+    final route = this.route = RoutePath.fromJson(rawData);
+
     await controller.moveCamera(CameraUpdate.fitMapPoints([
       LatLng(37.87369656276904, 127.74234032102943),
       LatLng(37.86069708242608, 127.74420063715208),
     ], padding: 10));
+    
+    final routeColor = Color.from(alpha: 1.0, red: 0, green: .78, blue: .31);
 
     // 선형에 맞게 경로를 생성합니다.
     final routeStyle = RouteStyle(
-      Colors.blue,
+      routeColor,
       12,
       strokeColor: Colors.white,
       strokeWidth: 4,
     );
-    final patternSize = Size(30, 30);
+    final patternSize = Size(30.0, 30.0);
     final patternIcon = await KImage.fromWidget(
       FaIcon(FontAwesomeIcons.caretUp, color: Colors.white),
       patternSize,
     );
     routeStyle.pattern = RoutePattern(patternIcon, 10);
-    await controller.routeLayer.addRoute(route!.getRoute, routeStyle);
+    await controller.routeLayer.addRoute(route.getRoute, routeStyle);
+
+    final icon = await rootBundle.load("assets/image/station.png");
+    final poiStyle1 = PoiStyle(
+      icon: KImage.fromData(icon.buffer.asUint8List(), 22, 22),
+      anchor: KPoint(.5, .5)
+    );
+    final poiStyle2 = PoiStyle(
+      icon: KImage.fromData(icon.buffer.asUint8List(), 22, 22),
+      anchor: KPoint(.5, .5)
+    )
+      ..addStyle(zoomLevel: 14, icon: null);
+    for (final station in route.station) {
+      await controller.labelLayer.addPoi(
+        station.position, 
+        style: station.direction ? poiStyle1 : poiStyle2, 
+      );
+    }
   }
 }
