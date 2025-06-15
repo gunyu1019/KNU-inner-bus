@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:knu_inner_bus/constant/color.dart';
+import 'package:knu_inner_bus/constant/text_style.dart';
 import 'package:knu_inner_bus/model/bus_state.dart';
 
 class BusInfo extends StatelessWidget {
@@ -8,11 +9,13 @@ class BusInfo extends StatelessWidget {
     required this.index,
     required this.dateTime,
     required this.busState,
+    this.simple = false,
     this.isLast = false,
   });
 
   final int index;
   final DateTime dateTime;
+  final bool simple;
   final bool isLast;
   final BusState busState;
 
@@ -48,8 +51,32 @@ class BusInfo extends StatelessWidget {
     BusState.next => smallRing(ThemeColor.black),
   };
 
+  double get paddingSize => switch(busState) {
+    BusState.closed => 18,
+    BusState.current => 18,
+    BusState.previous => 8,
+    BusState.next => 8,
+  };
+
   @override
   Widget build(BuildContext context) {
-    throw UnimplementedError();
+    final padding = EdgeInsets.all(paddingSize);
+
+    final columnChild = <Widget>[];
+
+    if ([BusState.closed, BusState.current].contains(busState) && !simple) {
+      columnChild.add(
+        Text(
+          '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}',
+          style: KakaoMapTextStyle.currentDescription,
+        ),
+      );
+    }
+
+    final column = Column(children: columnChild);
+    return Container(
+      padding: padding,
+      child: column
+    );
   }
 }
