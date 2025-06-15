@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/model/route_path.dart';
+import 'package:knu_inner_bus/screen/component/station_summary.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -16,9 +17,14 @@ class _MapPageState extends State<MapPage> {
   late KakaoMapController? controller;
   late RoutePath? route;
 
+  final int currentStationIndex = 0;
+
   @override
   void initState() {
     super.initState();
+    rootBundle
+        .loadString("assets/config/station.json")
+        .then((raw) => route = RoutePath.fromJson(raw));
   }
 
   Widget container(Size size) => Container(
@@ -30,7 +36,19 @@ class _MapPageState extends State<MapPage> {
     ),
     height: size.height,
     width: size.width,
-    child: const Text("테스트"),
+    child: GestureDetector(
+      onHorizontalDragUpdate: (details) {},
+      onHorizontalDragEnd: (detail) {},
+      child: ListView.builder(
+        itemCount: route!.station.length,
+        itemBuilder: (context, index) {
+          return StationSummary(
+            station: route!.station[index],
+            nextStation: route!.station.elementAtOrNull(index + 1)?.name,
+          );
+        },
+      ),
+    ),
   );
 
   @override
@@ -63,10 +81,7 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> onMapReady(KakaoMapController controller) async {
     this.controller = controller;
-
-    final rawData = await rootBundle
-        .loadString("assets/config/station.json");
-    final route = this.route = RoutePath.fromJson(rawData);
+    final route = this.route!;
 
     final routeColor = Color.from(alpha: 1.0, red: 0, green: .78, blue: .31);
 
@@ -89,17 +104,16 @@ class _MapPageState extends State<MapPage> {
     final icon = await rootBundle.load("assets/image/station.png");
     final poiStyle1 = PoiStyle(
       icon: KImage.fromData(icon.buffer.asUint8List(), 22, 22),
-      anchor: KPoint(.5, .5)
+      anchor: KPoint(.5, .5),
     );
     final poiStyle2 = PoiStyle(
       icon: KImage.fromData(icon.buffer.asUint8List(), 22, 22),
-      anchor: KPoint(.5, .5)
-    )
-      ..addStyle(zoomLevel: 14, icon: null);
+      anchor: KPoint(.5, .5),
+    )..addStyle(zoomLevel: 14, icon: null);
     for (final station in route.station) {
       await controller.labelLayer.addPoi(
-        station.position, 
-        style: station.direction ? poiStyle1 : poiStyle2, 
+        station.position,
+        style: station.direction ? poiStyle1 : poiStyle2,
       );
     }
 
