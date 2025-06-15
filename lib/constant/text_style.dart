@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 
 /* Kakao Map Page */
@@ -54,6 +53,13 @@ class KakaoMapTextStyle {
   static final finalCount = TextStyle(
     color: ThemeColor.finalTextColor,
     fontSize: 14,
+    decoration: TextDecoration.none,
+  );
+
+  static final closedTitle = TextStyle(
+    color: ThemeColor.closedTextColor,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
     decoration: TextDecoration.none,
   );
 }
