@@ -9,7 +9,7 @@ class KakaoMapTextStyle {
     fontWeight: FontWeight.bold,
     decoration: TextDecoration.none,
   );
-  static final previousTitle = TextStyle(
+  static final direction = TextStyle(
     color: ThemeColor.secondaryTextColor,
     fontSize: 16,
     fontWeight: FontWeight.bold,
