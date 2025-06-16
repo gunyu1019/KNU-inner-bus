@@ -15,16 +15,13 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   late KakaoMapController? controller;
-  late RoutePath? route;
+  RoutePath? route;
 
   final int currentStationIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    rootBundle
-        .loadString("assets/config/station.json")
-        .then((raw) => route = RoutePath.fromJson(raw));
   }
 
   Widget container(Size size) => Container(
@@ -36,10 +33,15 @@ class _MapPageState extends State<MapPage> {
     ),
     height: size.height,
     width: size.width,
-    child: GestureDetector(
+    child: route == null ? const SizedBox.shrink() : StationSummary(
+            station: route!.station.first,
+            nextStation: route!.station.last.name,
+          )
+    /* child: route == null ? const SizedBox.shrink() : GestureDetector(
       onHorizontalDragUpdate: (details) {},
       onHorizontalDragEnd: (detail) {},
       child: ListView.builder(
+        scrollDirection: Axis.horizontal,
         itemCount: route!.station.length,
         itemBuilder: (context, index) {
           return StationSummary(
@@ -48,7 +50,7 @@ class _MapPageState extends State<MapPage> {
           );
         },
       ),
-    ),
+    ), */
   );
 
   @override
@@ -81,6 +83,12 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> onMapReady(KakaoMapController controller) async {
     this.controller = controller;
+    
+    final rawData = await rootBundle.loadString("assets/config/station.json");
+    setState(() {
+      this.route = RoutePath.fromJson(rawData);
+    });
+    if (this.route == null) return;
     final route = this.route!;
 
     final routeColor = Color.from(alpha: 1.0, red: 0, green: .78, blue: .31);
