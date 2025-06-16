@@ -93,6 +93,14 @@ class Station {
     return 'Station(name: $name, position: $position, direction: $direction, actualDistance: $actualDistance, distance: $distance)';
   }
 
+  /// [compareTime] 이후에 정차하는 시간표 중 가장 가까운 시간을 반환합니다.
+  MapEntry<String, DateTime> nearTimetable(DateTime? compareTime) {
+    final rawCompareTime = compareTime ?? DateTime.now();
+    return time.entries
+        .where((element) => element.value.isAfter(rawCompareTime))
+        .reduce((a, b) => a.value.isBefore(b.value) ? a : b);
+  }
+
   @override
   bool operator ==(covariant Station other) {
     if (identical(this, other)) return true;
