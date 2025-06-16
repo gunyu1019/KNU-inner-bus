@@ -40,11 +40,7 @@ class BusInfo extends StatelessWidget {
   Widget smallRing(Color color) => Container(
     width: 20,
     height: 20,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10),
-      shape: BoxShape.circle,
-      color: color,
-    ),
+    decoration: BoxDecoration(shape: BoxShape.circle, color: color),
   );
 
   Widget hightlightRing() => switch (busState) {
@@ -74,6 +70,9 @@ class BusInfo extends StatelessWidget {
             },
           );
 
+  bool get isHightlight =>
+      [BusState.closed, BusState.current].contains(busState);
+
   @override
   Widget build(BuildContext context) {
     final titleText =
@@ -88,19 +87,24 @@ class BusInfo extends StatelessWidget {
         style: switch (busState) {
           BusState.closed => KakaoMapTextStyle.closedTitle,
           BusState.current => KakaoMapTextStyle.currentTitle,
-          BusState.previous => KakaoMapTextStyle.previousTitle,
+          BusState.previous => KakaoMapTextStyle.previous,
           BusState.next => KakaoMapTextStyle.next,
         },
       ),
+      Expanded(child: Container()),
     ];
 
     if (busState != BusState.closed) {
-      titleChild.add(const SizedBox(width: double.infinity));
       titleChild.add(countText());
     }
-    final columnChild = <Widget>[Row(children: titleChild)];
+    final columnChild = <Widget>[
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: titleChild
+      )
+    ];
 
-    if ([BusState.closed, BusState.current].contains(busState) && !simple) {
+    if (isHightlight && !simple) {
       final timedelta = DateTime.now().difference(dateTime);
       final descriptionText =
           busState == BusState.closed
@@ -110,7 +114,7 @@ class BusInfo extends StatelessWidget {
               : '${timedelta.inMinutes}분 후 도착 예정 ($currentStation)';
       columnChild.add(
         Padding(
-          padding: const EdgeInsets.only(left: 52, top: 10, bottom: 16),
+          padding: const EdgeInsets.only(left: 34, top: 3),
           child: Text(
             descriptionText,
             style: KakaoMapTextStyle.currentDescription,
@@ -119,7 +123,34 @@ class BusInfo extends StatelessWidget {
       );
     }
 
-    final column = Column(children: columnChild);
-    return Container(padding: padding, child: column);
+    final column = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: columnChild,
+    );
+    final clip = isHightlight ? Clip.antiAlias : Clip.none;
+    final decoration =
+        isHightlight
+            ? ShapeDecoration(
+              color: Colors.white.withValues(alpha: 50),
+              shape: RoundedRectangleBorder(
+                side: BorderSide(width: 1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              shadows: [
+                BoxShadow(
+                  color: Color(0x3F000000),
+                  blurRadius: 4,
+                  offset: Offset(0, 4),
+                  spreadRadius: 0,
+                ),
+              ],
+            )
+            : null;
+    return Container(
+      padding: padding,
+      clipBehavior: clip,
+      decoration: decoration,
+      child: column,
+    );
   }
 }
