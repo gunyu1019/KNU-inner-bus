@@ -94,7 +94,8 @@ class Station {
   }
 
   /// [compareTime] 이후에 정차하는 시간표 중 가장 가까운 시간을 반환합니다.
-  MapEntry<String, DateTime>? nearTimetable(DateTime? compareTime) {
+  /// 만약 운행 시간을 경과하여 운행이 종료된 경우 null을 반환합니다.
+  MapEntry<String, DateTime>? nearTimetable([DateTime? compareTime]) {
     final rawCompareTime = compareTime ?? DateTime.now();
     final entries = time.entries
         .where((element) => element.value.isAfter(rawCompareTime));

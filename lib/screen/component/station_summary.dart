@@ -33,10 +33,33 @@ class StationSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 4,
+      children: [
+        titleText(),
+        directionText()
+      ],
+    );
+    final now = DateTime.now();
+    final currentInfo = station.nearTimetable(now);
+    final children = <Widget>[title];
+
+    if (currentInfo != null || now.isBefore(DateTime(now.year, now.month, now.day, 5))) {
+      // 운행이 종료된 경우 (출발 전 배차는 05:00 이후로 간주함.)
+    } else if (currentInfo?.key == station.time.keys.first) {
+      // 첫 차
+    } else {
+      // 그 외의 경우의 수
+    }
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      child: Column(children: [titleText(), directionText()]),
+      child: Column(
+        spacing: 10,
+        children: children
+      )
     );
   }
 }
