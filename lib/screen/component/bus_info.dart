@@ -35,12 +35,14 @@ class BusInfo extends StatelessWidget {
         ),
       ),
     ),
+    child: const SizedBox.shrink(),
   );
 
   Widget smallRing(Color color) => Container(
     width: 20,
     height: 20,
     decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+    child: const SizedBox.shrink(),
   );
 
   Widget hightlightRing() => switch (busState) {
@@ -51,7 +53,7 @@ class BusInfo extends StatelessWidget {
   };
 
   EdgeInsets get padding => switch (busState) {
-    BusState.closed => EdgeInsets.all(18),
+    BusState.closed => EdgeInsets.symmetric(horizontal: 18, vertical: 12),
     BusState.current => EdgeInsets.all(18),
     BusState.previous => EdgeInsets.fromLTRB(20, 8, 16, 8),
     BusState.next => EdgeInsets.fromLTRB(20, 8, 16, 8),
@@ -90,25 +92,23 @@ class BusInfo extends StatelessWidget {
           BusState.previous => KakaoMapTextStyle.previous,
           BusState.next => KakaoMapTextStyle.next,
         },
+        textAlign: TextAlign.center,
       ),
-      Expanded(child: Container()),
+      Expanded(child: const SizedBox.shrink()),
     ];
 
     if (busState != BusState.closed) {
       titleChild.add(countText());
     }
     final columnChild = <Widget>[
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: titleChild
-      )
+      Row(crossAxisAlignment: CrossAxisAlignment.center, children: titleChild),
     ];
 
     if (isHightlight && !simple) {
       final timedelta = DateTime.now().difference(dateTime);
       final descriptionText =
           busState == BusState.closed
-              ? '운행 종료'
+              ? '운행이 종료되었습니다.'
               : timedelta.inMinutes < 1
               ? '곧 도착 ($currentStation)'
               : '${timedelta.inMinutes}분 후 도착 예정 ($currentStation)';
