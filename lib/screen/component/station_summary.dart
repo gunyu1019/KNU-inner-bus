@@ -30,10 +30,10 @@ class StationSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = Padding(
-      padding: EdgeInsets.only(left: 4),
+      padding: EdgeInsets.only(left: 4, bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 2.0,
+        spacing: 1.0,
         children: [titleText(), directionText()],
       ),
     );
