@@ -59,8 +59,54 @@ class StationSummary extends StatelessWidget {
       );
     } else if (currentInfo.key == station.time.keys.first) {
       // 첫 차
+      children.add(
+        BusInfo(
+          busState: BusState.current,
+          dateTime: currentInfo.value,
+          index: int.parse(currentInfo.key),
+          currentStation: station.name,
+        ),
+      );
+      station.time.entries
+          .skip(1)
+          .take(2)
+          .map(
+            (timetable) => BusInfo(
+              busState: BusState.next,
+              dateTime: timetable.value,
+              index: int.parse(timetable.key),
+            ),
+          )
+          .forEach(children.add);
     } else {
-      // 그 외의 경우의 수
+      final previousInfo =
+          station.time.entries
+              .takeWhile((timetable) => timetable.key != currentInfo.key)
+              .last;
+      final nextInfo =
+          station.time.entries
+              .skipWhile((timetable) => timetable.key != currentInfo.key)
+              .skip(1)
+              .first;
+
+      children.addAll([
+        BusInfo(
+          busState: BusState.previous,
+          dateTime: previousInfo.value,
+          index: int.parse(previousInfo.key),
+        ),
+        BusInfo(
+          busState: BusState.current,
+          dateTime: currentInfo.value,
+          index: int.parse(currentInfo.key),
+          currentStation: station.name,
+        ),
+        BusInfo(
+          busState: BusState.next,
+          dateTime: nextInfo.value,
+          index: int.parse(nextInfo.key),
+        ),
+      ]);
     }
 
     return Container(
