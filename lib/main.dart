@@ -10,7 +10,12 @@ void main() async {
 }
 
 final route = GoRouter(routes: [
-  GoRoute(path: "/", builder: (_, _) => MapPage())
+  ShellRoute(
+    builder: (context, state, widget) => Scaffold(body: widget),
+    routes: [
+      GoRoute(path: "/", builder: (_, _) => MapPage())
+    ]
+  ),
 ]);
 
 class MyApp extends StatelessWidget {
