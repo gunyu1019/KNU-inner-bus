@@ -50,12 +50,18 @@ class StationSummary extends StatelessWidget {
             (timetable) => BusInfo(
               busState: BusState.previous,
               dateTime: timetable.value,
+              isLast: timetable.key == station.time.keys.last,
               index: int.parse(timetable.key),
             ),
           )
           .forEach(children.add);
       children.add(
-        BusInfo(index: -1, dateTime: now, busState: BusState.closed),
+        BusInfo(
+          index: -1,
+          dateTime: now,
+          busState: BusState.closed,
+          descriptionFomrat: "운행이 종료되었습니다.",
+        ),
       );
     } else if (currentInfo.key == station.time.keys.first) {
       // 첫 차
@@ -65,6 +71,8 @@ class StationSummary extends StatelessWidget {
           dateTime: currentInfo.value,
           index: int.parse(currentInfo.key),
           currentStation: station.name,
+          isLast: currentInfo.key == station.time.keys.last,
+          descriptionFomrat: "{MM}분 후 {INDEX}회차 출발 예정",
         ),
       );
       station.time.entries
@@ -74,6 +82,7 @@ class StationSummary extends StatelessWidget {
             (timetable) => BusInfo(
               busState: BusState.next,
               dateTime: timetable.value,
+              isLast: timetable.key == station.time.keys.last,
               index: int.parse(timetable.key),
             ),
           )
