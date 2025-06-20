@@ -6,6 +6,8 @@ import 'package:knu_inner_bus/model/bus_state.dart';
 import 'package:knu_inner_bus/model/station.dart';
 import 'package:knu_inner_bus/screen/component/bus_info.dart';
 
+/// 정류장 요약 정보를 표시하는 위젯입니다.
+/// 정류장 이름과 방향, 그리고 현재 시간에 따른 버스 예상 도착 정보를 표시합니다.
 class StationSummaryItem extends StatelessWidget {
   const StationSummaryItem({
     super.key,
@@ -14,13 +16,21 @@ class StationSummaryItem extends StatelessWidget {
     this.onDirectionTap,
   });
 
+  /// 정류장 정보를 담고 있는 객체입니다.
   final Station station;
+
+  /// 다음 정류장 이름입니다.
+  /// 이 값이 null이면 종점으로 간주합니다.
   final String? nextStation;
 
+  /// 방향을 눌렀을 때 호출되는 콜백 함수입니다.
+  /// 이 콜백은 방향을 눌렀을 때, 다른 방향에 있는 정류장으로 이동할 때 사용됩니다.
   final void Function()? onDirectionTap;
 
+  /// 정류장 이름을 표시하는 위젯입니다.
   Widget titleText() => Text(station.name, style: KakaoMapTextStyle.title);
 
+  /// 다음 정류장 방향을 표시하는 위젯입니다.
   Widget directionText() => InkWell(
     onTap: onDirectionTap,
     child: Row(children: [
