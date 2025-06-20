@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/model/route_path.dart';
-import 'package:knu_inner_bus/screen/component/station_summary.dart';
+import 'package:knu_inner_bus/screen/page/station_summary.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -33,24 +33,13 @@ class _MapPageState extends State<MapPage> {
     ),
     height: size.height,
     width: size.width,
-    child: route == null ? const SizedBox.shrink() : StationSummary(
-            station: route!.station.first,
-            nextStation: route!.station.last.name,
-          )
-    /* child: route == null ? const SizedBox.shrink() : GestureDetector(
-      onHorizontalDragUpdate: (details) {},
-      onHorizontalDragEnd: (detail) {},
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: route!.station.length,
-        itemBuilder: (context, index) {
-          return StationSummary(
-            station: route!.station[index],
-            nextStation: route!.station.elementAtOrNull(index + 1)?.name,
-          );
-        },
-      ),
-    ), */
+    child:
+        route == null
+            ? const SizedBox.shrink()
+            : StationSummary(
+              size: size,
+              route: route!,
+            ),
   );
 
   @override
@@ -83,7 +72,7 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> onMapReady(KakaoMapController controller) async {
     this.controller = controller;
-    
+
     final rawData = await rootBundle.loadString("assets/config/station.json");
     setState(() {
       this.route = RoutePath.fromJson(rawData);
@@ -122,6 +111,9 @@ class _MapPageState extends State<MapPage> {
       await controller.labelLayer.addPoi(
         station.position,
         style: station.direction ? poiStyle1 : poiStyle2,
+        onClick: () {
+          print(station.actualDistance);
+        },
       );
     }
 
