@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/constant/text_style.dart';
 import 'package:knu_inner_bus/model/bus_state.dart';
 import 'package:knu_inner_bus/model/station.dart';
 import 'package:knu_inner_bus/screen/component/bus_info.dart';
 
-class StationSummary extends StatelessWidget {
-  const StationSummary({
+class StationSummaryItem extends StatelessWidget {
+  const StationSummaryItem({
     super.key,
     required this.station,
     this.nextStation,
@@ -19,18 +21,26 @@ class StationSummary extends StatelessWidget {
 
   Widget titleText() => Text(station.name, style: KakaoMapTextStyle.title);
 
-  Widget directionText() => GestureDetector(
+  Widget directionText() => InkWell(
     onTap: onDirectionTap,
-    child: Text(
-      nextStation == null ? "종점" : "$nextStation 방향",
-      style: KakaoMapTextStyle.direction,
-    ),
+    child: Row(children: [
+      Text(
+        nextStation == null ? "종점" : "$nextStation 방향",
+        style: KakaoMapTextStyle.direction,
+      ),
+      const SizedBox(width: 4),
+      FaIcon(
+        FontAwesomeIcons.arrowRotateLeft,
+        size: 14,
+        color: ThemeColor.secondaryTextColor,
+      ),
+    ])
   );
 
   @override
   Widget build(BuildContext context) {
     final title = Padding(
-      padding: EdgeInsets.only(left: 4, bottom: 8),
+      padding: EdgeInsets.only(left: 4, bottom: 6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 1.0,
@@ -122,7 +132,7 @@ class StationSummary extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 5.0,
+        spacing: 2.0,
         children: children,
       ),
     );
