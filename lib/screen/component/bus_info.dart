@@ -12,6 +12,7 @@ class BusInfo extends StatelessWidget {
     this.simple = false,
     this.isLast = false,
     this.currentStation,
+    this.descriptionFomrat = '{MM}분 후 도착 예정 {CURRENT_STATION}',
   });
 
   final int index;
@@ -19,6 +20,7 @@ class BusInfo extends StatelessWidget {
   final bool simple;
   final bool isLast;
   final BusState busState;
+  final String descriptionFomrat;
 
   final String? currentStation;
 
@@ -63,7 +65,7 @@ class BusInfo extends StatelessWidget {
       isLast
           ? Text('마지막 회차', style: KakaoMapTextStyle.finalCount)
           : Text(
-            '$index 회차',
+            '${index + 1} 회차',
             style: switch (busState) {
               BusState.closed => null,
               BusState.current => KakaoMapTextStyle.nextCount,
@@ -105,13 +107,11 @@ class BusInfo extends StatelessWidget {
     ];
 
     if (isHightlight && !simple) {
-      final timedelta = DateTime.now().difference(dateTime);
-      final descriptionText =
-          busState == BusState.closed
-              ? '운행이 종료되었습니다.'
-              : timedelta.inMinutes < 1
-              ? '곧 도착 ($currentStation)'
-              : '${timedelta.inMinutes}분 후 도착 예정 ($currentStation)';
+      final timedelta = dateTime.difference(DateTime.now());
+      final descriptionText = descriptionFomrat
+          .replaceAll("{MM}", timedelta.inMinutes.toString())
+          .replaceAll("{CURRENT_STATION}", currentStation ?? "알 수 없음")
+          .replaceAll("{INDEX}", (index + 1).toString());
       columnChild.add(
         Padding(
           padding: const EdgeInsets.only(left: 34, top: 3),
