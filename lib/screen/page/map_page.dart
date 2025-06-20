@@ -18,6 +18,8 @@ class _MapPageState extends State<MapPage> {
   RoutePath? route;
 
   final int currentStationIndex = 0;
+  final GlobalKey<StationSummaryPager> summaryPagerKey =
+      GlobalKey<StationSummaryPager>();
 
   @override
   void initState() {
@@ -36,10 +38,7 @@ class _MapPageState extends State<MapPage> {
     child:
         route == null
             ? const SizedBox.shrink()
-            : StationSummary(
-              size: size,
-              route: route!,
-            ),
+            : StationSummary(key: summaryPagerKey, size: size, route: route!),
   );
 
   @override
@@ -107,12 +106,12 @@ class _MapPageState extends State<MapPage> {
       icon: KImage.fromData(icon.buffer.asUint8List(), 22, 22),
       anchor: KPoint(.5, .5),
     )..addStyle(zoomLevel: 14, icon: null);
-    for (final station in route.station) {
+    for (final station in route.station.indexed) {
       await controller.labelLayer.addPoi(
-        station.position,
-        style: station.direction ? poiStyle1 : poiStyle2,
+        station.$2.position,
+        style: station.$2.direction ? poiStyle1 : poiStyle2,
         onClick: () {
-          print(station.actualDistance);
+          summaryPagerKey.currentState?.scrollToPage(station.$1);
         },
       );
     }
