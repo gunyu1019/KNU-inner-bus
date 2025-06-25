@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class StationDetail extends StatefulWidget {
+class StationDetail extends StatelessWidget {
   const StationDetail({super.key});
-
+  
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(children: [],),
+    );
   }
 }
