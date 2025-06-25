@@ -66,13 +66,16 @@ class StationDetailTitle extends StatelessWidget {
     void Function()? onClick,
   ) {
     final double width = MediaQuery.of(context).size.width * (1 - currentWidthRatio) / 2;
-    return SizedBox(
+    final padding = EdgeInsets.only(top: 18);
+    return Container(
+      padding: padding,
       width: width,
       child: GestureDetector(
         onTap: onClick,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 3.0,
           children: [
             otherCircle(),
             Text(name, style: style, overflow: TextOverflow.ellipsis),
@@ -94,6 +97,8 @@ class StationDetailTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final otherRatio = (1 - currentWidthRatio) / 2;
+    final otherPosition = width * otherRatio / 2;
     final height = 64.0;
     return SizedBox(
       width: width,
@@ -104,7 +109,28 @@ class StationDetailTitle extends StatelessWidget {
           currentPoint(context),
           Positioned(
             left: -(width / 2),
+            top: -3,
             child: divider(width, 3.0)
+          ),
+          Positioned(
+            left: otherPosition,
+            top: -(height / 2),
+            child: otherPoint(
+              context,
+              previousName,
+              KakaoMapTextStyle.previous,
+              onPreviousClick,
+            ),
+          ),
+          Positioned(
+            right: otherPosition,
+            top: -(height / 2),
+            child: otherPoint(
+              context,
+              nextName,
+              KakaoMapTextStyle.next,
+              onNextClick,
+            ),
           ),
         ],
       ),
