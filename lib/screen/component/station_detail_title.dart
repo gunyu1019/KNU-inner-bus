@@ -82,10 +82,32 @@ class StationDetailTitle extends StatelessWidget {
     );
   }
 
+  Widget divider(double width, double thickness) => SizedBox(
+    width: width,
+    height: thickness * 2,
+    child: Divider(
+      color: ThemeColor.primaryTextColor,
+      thickness: thickness,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      ],
+    final width = MediaQuery.of(context).size.width;
+    final height = 64.0;
+    return SizedBox(
+      width: width,
+      height: height,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          currentPoint(context),
+          Positioned(
+            left: -(width / 2),
+            child: divider(width, 3.0)
+          ),
+        ],
+      ),
     );
   }
 
