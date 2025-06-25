@@ -63,3 +63,21 @@ class KakaoMapTextStyle {
     decoration: TextDecoration.none,
   );
 }
+
+/* Station Detail Page */
+class StationDetailTextStyle {
+  static final title = KakaoMapTextStyle.title;
+
+  static final previousTitle = TextStyle(
+    color: ThemeColor.secondaryTextColor,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    decoration: TextDecoration.none,
+  );
+  static final nextTitle = TextStyle(
+    color: ThemeColor.primaryTextColor,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    decoration: TextDecoration.none,
+  );
+}
