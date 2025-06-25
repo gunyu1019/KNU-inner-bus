@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/constant/text_style.dart';
@@ -54,16 +53,38 @@ class StationDetailTitle extends StatelessWidget {
     );
   }
 
-  Widget otherPoint(BuildContext context) {
+  Widget otherCircle() => Container(
+    width: 24,
+    height: 24,
+    decoration: ShapeDecoration(color: ThemeColor.black, shape: OvalBorder()),
+  );
+
+  Widget otherPoint(
+    BuildContext context,
+    String name,
+    TextStyle style,
+    void Function()? onClick,
+  ) {
     final double width = MediaQuery.of(context).size.width * (1 - currentWidthRatio) / 2;
-    return Text("123");
+    return SizedBox(
+      width: width,
+      child: GestureDetector(
+        onTap: onClick,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            otherCircle(),
+            Text(name, style: style, overflow: TextOverflow.ellipsis),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       ],
     );
   }
