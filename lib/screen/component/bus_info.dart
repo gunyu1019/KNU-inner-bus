@@ -163,14 +163,14 @@ class BusInfo extends StatelessWidget {
     final decoration =
         isHightlight
             ? ShapeDecoration(
-              color: Colors.white.withValues(alpha: 50),
+              color: ThemeColor.primaryBackgroundColor,
               shape: RoundedRectangleBorder(
                 side: BorderSide(width: 1),
                 borderRadius: BorderRadius.circular(20),
               ),
               shadows: [
                 BoxShadow(
-                  color: Color(0x3F000000),
+                  color: ThemeColor.shadowColor,
                   blurRadius: 4,
                   offset: Offset(0, 4),
                   spreadRadius: 0,
