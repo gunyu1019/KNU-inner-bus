@@ -62,6 +62,12 @@ class KakaoMapTextStyle {
     fontWeight: FontWeight.bold,
     decoration: TextDecoration.none,
   );
+  static final hourFormat = TextStyle(
+    color: ThemeColor.white,
+    fontSize: 16.5,
+    fontWeight: FontWeight.bold,
+    decoration: TextDecoration.none,
+  );
 }
 
 /* Station Detail Page */
