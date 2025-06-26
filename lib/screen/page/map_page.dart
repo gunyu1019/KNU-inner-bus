@@ -34,12 +34,15 @@ class _MapPageState extends State<MapPage> {
     /// PC, Tablet과 Mobile Device에서 화면 구성은 상이합니다.
     final ratio = media.size.width / media.size.height;
     final isMobile = ratio < 1.0;
-    final mapSize = isMobile 
+    final mapSize =
+        isMobile
             ? Size(media.size.width, media.size.height - 300)
             : Size(media.size.width, media.size.height);
     final overlaySize = isMobile ? Size(media.size.width, 300) : Size(500, 680);
-    final overlayPositioned = isMobile
-            ? (Widget child) => Positioned(left: 0, right: 0, bottom: 0, child: child)
+    final overlayPositioned =
+        isMobile
+            ? (Widget child) =>
+                Positioned(left: 0, right: 0, bottom: 0, child: child)
             : (Widget child) => Positioned(right: 20, top: 20, child: child);
 
     late Widget containerChild;
@@ -53,26 +56,34 @@ class _MapPageState extends State<MapPage> {
       );
     } else {
       containerChild = StationDetail(
-        key: summaryPagerKey,
         size: overlaySize,
         station: route!.station[0],
+        previousName: '이전 정류장',
+        nextName: null,
       );
     }
 
+    final containerShadow = [
+      BoxShadow(color: ThemeColor.grey, blurRadius: 4, offset: Offset(0, 4)),
+    ];
+    final containerDecoration = !isMobile
+        ? ShapeDecoration(
+            color: Colors.white,
+            shadows: containerShadow,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+          )
+        : BoxDecoration(
+            color: Colors.white,
+            boxShadow: containerShadow,
+          );
+
     final container = Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: ThemeColor.grey,
-            blurRadius: 4,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
+      decoration: containerDecoration,
       height: overlaySize.height,
       width: overlaySize.width,
-      child: containerChild
+      child: containerChild,
     );
 
     final option = KakaoMapOption(
