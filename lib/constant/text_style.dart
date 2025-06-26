@@ -80,4 +80,10 @@ class StationDetailTextStyle {
     fontWeight: FontWeight.bold,
     decoration: TextDecoration.none,
   );
+  static final currentTitle = TextStyle(
+    color: ThemeColor.primaryTextColor,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    decoration: TextDecoration.none,
+  );
 }
