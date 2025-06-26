@@ -9,10 +9,13 @@ class StationDetailTitle extends StatelessWidget {
     required this.station,
     required this.previousName,
     required this.nextName,
+    this.size,
     this.onPreviousClick,
     this.onCurrentClick,
     this.onNextClick,
   });
+
+  final Size? size;
 
   final Station station;
   final String previousName;
@@ -22,20 +25,23 @@ class StationDetailTitle extends StatelessWidget {
   final void Function()? onCurrentClick;
   final void Function()? onNextClick;
 
-  Widget currentPoint(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width * currentWidthRatio;
-    final padding = EdgeInsets.symmetric(vertical: 16);
+  Widget currentPoint(Size size) {
+    final double width = size.width * currentWidthRatio;
 
-    Widget child = Text(station.name, style: KakaoMapTextStyle.currentTitle);
+    Widget child = Text(
+      station.name,
+      style: StationDetailTextStyle.currentTitle,
+      textAlign: TextAlign.center,
+    );
     if (onCurrentClick != null) {
       child = InkWell(onTap: onCurrentClick, child: child);
     }
 
     return Container(
       width: width,
-      padding: padding,
+      padding: EdgeInsets.only(top: 1.0, bottom: 8.0),
       decoration: ShapeDecoration(
-        color: Colors.white,
+        color: ThemeColor.white,
         shape: RoundedRectangleBorder(
           side: BorderSide(width: 1),
           borderRadius: BorderRadius.circular(20),
@@ -60,13 +66,13 @@ class StationDetailTitle extends StatelessWidget {
   );
 
   Widget otherPoint(
-    BuildContext context,
     String name,
     TextStyle style,
     void Function()? onClick,
+    Size size,
   ) {
-    final double width = MediaQuery.of(context).size.width * (1 - currentWidthRatio) / 2;
-    final padding = EdgeInsets.only(top: 18);
+    final double width = size.width * (1 - currentWidthRatio) / 2;
+    final padding = EdgeInsets.only(top: 24, bottom: 6);
     return Container(
       padding: padding,
       width: width,
@@ -88,49 +94,42 @@ class StationDetailTitle extends StatelessWidget {
   Widget divider(double width, double thickness) => SizedBox(
     width: width,
     height: thickness * 2,
-    child: Divider(
-      color: ThemeColor.primaryTextColor,
-      thickness: thickness,
-    ),
+    child: Divider(color: ThemeColor.primaryTextColor, thickness: thickness),
   );
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final otherRatio = (1 - currentWidthRatio) / 2;
-    final otherPosition = width * otherRatio / 2;
-    final height = 64.0;
+    final size = this.size ?? MediaQuery.of(context).size;
+    final width = size.width;
+    final height = 70.0;
+
+    final otherPosition = width * (1 - currentWidthRatio) / 4;
+    // print(otherPosition);
+
     return SizedBox(
       width: width,
-      height: height,
+      // height: height,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          currentPoint(context),
-          Positioned(
-            left: -(width / 2),
-            top: -3,
-            child: divider(width, 3.0)
-          ),
-          Positioned(
-            left: otherPosition,
-            top: -(height / 2),
-            child: otherPoint(
-              context,
-              previousName,
-              KakaoMapTextStyle.previous,
-              onPreviousClick,
-            ),
-          ),
-          Positioned(
-            right: otherPosition,
-            top: -(height / 2),
-            child: otherPoint(
-              context,
-              nextName,
-              KakaoMapTextStyle.next,
-              onNextClick,
-            ),
+          Positioned(top: 30.5, child: divider(width, 6.0)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              otherPoint(
+                previousName,
+                StationDetailTextStyle.previousTitle,
+                onPreviousClick,
+                size,
+              ),
+              currentPoint(size),
+              otherPoint(
+                nextName,
+                StationDetailTextStyle.nextTitle,
+                onNextClick,
+                size,
+              ),
+            ],
           ),
         ],
       ),
