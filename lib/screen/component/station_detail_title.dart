@@ -18,8 +18,8 @@ class StationDetailTitle extends StatelessWidget {
   final Size? size;
 
   final Station station;
-  final String previousName;
-  final String nextName;
+  final String? previousName;
+  final String? nextName;
 
   final void Function()? onPreviousClick;
   final void Function()? onCurrentClick;
@@ -66,7 +66,7 @@ class StationDetailTitle extends StatelessWidget {
   );
 
   Widget otherPoint(
-    String name,
+    String? name,
     TextStyle style,
     void Function()? onClick,
     Size size,
@@ -76,7 +76,7 @@ class StationDetailTitle extends StatelessWidget {
     return Container(
       padding: padding,
       width: width,
-      child: GestureDetector(
+      child: name != null ? GestureDetector(
         onTap: onClick,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -87,7 +87,7 @@ class StationDetailTitle extends StatelessWidget {
             Text(name, style: style, overflow: TextOverflow.ellipsis),
           ],
         ),
-      ),
+      ) : const SizedBox.shrink(),
     );
   }
 
@@ -101,10 +101,6 @@ class StationDetailTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = this.size ?? MediaQuery.of(context).size;
     final width = size.width;
-    final height = 70.0;
-
-    final otherPosition = width * (1 - currentWidthRatio) / 4;
-    // print(otherPosition);
 
     return SizedBox(
       width: width,
