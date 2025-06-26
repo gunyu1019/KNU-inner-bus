@@ -10,6 +10,7 @@ class ThemeColor {
 
   /* Background Color */
   static final primaryBackgroundColor = const Color.fromARGB(255, 255, 255, 255);
+  static final secondaryBackgroundColor = const Color.fromARGB(255, 217, 217, 217);
   static final shadowColor = const Color.fromARGB(64, 0, 0, 0);
 
   static final black = Colors.black;
