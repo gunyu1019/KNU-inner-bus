@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/model/route_path.dart';
+import 'package:knu_inner_bus/screen/page/station_detail.dart';
 import 'package:knu_inner_bus/screen/page/station_summary.dart';
 
 class MapPage extends StatefulWidget {
@@ -26,33 +27,53 @@ class _MapPageState extends State<MapPage> {
     super.initState();
   }
 
-  Widget container(Size size) => Container(
-    decoration: BoxDecoration(
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(color: ThemeColor.grey, blurRadius: 4, offset: Offset(0, 4)),
-      ],
-    ),
-    height: size.height,
-    width: size.width,
-    child:
-        route == null
-            ? const SizedBox.shrink()
-            : StationSummary(key: summaryPagerKey, size: size, route: route!),
-  );
-
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
 
     /// PC, Tablet과 Mobile Device에서 화면 구성은 상이합니다.
     final ratio = media.size.width / media.size.height;
-    final mapSize =
-        ratio < 1
+    final isMobile = ratio < 1.0;
+    final mapSize = isMobile 
             ? Size(media.size.width, media.size.height - 300)
             : Size(media.size.width, media.size.height);
-    final overlaySize =
-        ratio < 1 ? Size(media.size.width, 300) : Size(500, 300);
+    final overlaySize = isMobile ? Size(media.size.width, 300) : Size(500, 680);
+    final overlayPositioned = isMobile
+            ? (Widget child) => Positioned(left: 0, right: 0, bottom: 0, child: child)
+            : (Widget child) => Positioned(right: 20, top: 20, child: child);
+
+    late Widget containerChild;
+    if (route == null) {
+      containerChild = const SizedBox.shrink();
+    } else if (isMobile) {
+      containerChild = StationSummary(
+        key: summaryPagerKey,
+        size: overlaySize,
+        route: route!,
+      );
+    } else {
+      containerChild = StationDetail(
+        key: summaryPagerKey,
+        size: overlaySize,
+        station: route!.station[0],
+      );
+    }
+
+    final container = Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: ThemeColor.grey,
+            blurRadius: 4,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      height: overlaySize.height,
+      width: overlaySize.width,
+      child: containerChild
+    );
 
     final option = KakaoMapOption(
       position: LatLng(37.868471010792305, 127.74478109028253),
@@ -64,7 +85,7 @@ class _MapPageState extends State<MapPage> {
           width: mapSize.width,
           child: KakaoMap(option: option, onMapReady: onMapReady),
         ),
-        Positioned(left: 0, right: 0, bottom: 0, child: container(overlaySize)),
+        overlayPositioned(container),
       ],
     );
   }
