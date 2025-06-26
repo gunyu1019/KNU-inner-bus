@@ -90,6 +90,26 @@ class BusInfo extends StatelessWidget {
     BusState.next => EdgeInsets.fromLTRB(20, 8, 16, 8),
   };
 
+  /// 오전/오후를 나타내는 텍스트 위젯입니다.
+  Widget hour() => Container(
+    width: 40,
+    height: 20,
+    alignment: Alignment.center,
+    decoration: BoxDecoration(
+      color: switch (busState) {
+        BusState.closed => ThemeColor.secondaryBackgroundColor,
+        BusState.current => ThemeColor.black,
+        BusState.previous => ThemeColor.secondaryBackgroundColor,
+        BusState.next => ThemeColor.black,
+      },
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Text(
+      dateTime.hour < 12 ? 'AM' : 'PM',
+      style: KakaoMapTextStyle.hourFormat,
+    ),
+  );
+
   /// 버스의 회차를 표시하는 텍스트 위젯입니다.
   Text countText() =>
       isLast
@@ -128,6 +148,8 @@ class BusInfo extends StatelessWidget {
         },
         textAlign: TextAlign.center,
       ),
+      const SizedBox(width: 8),
+      hour(),
       Expanded(child: const SizedBox.shrink()),
     ];
 
