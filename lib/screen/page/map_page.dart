@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/model/route_path.dart';
-import 'package:knu_inner_bus/screen/page/station_detail.dart';
-import 'package:knu_inner_bus/screen/page/station_summary.dart';
+import 'package:knu_inner_bus/screen/component/station_summary_item.dart';
+import 'package:knu_inner_bus/screen/component/station_detail_item.dart';
+import 'package:knu_inner_bus/screen/page/station_pager.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -19,8 +21,8 @@ class _MapPageState extends State<MapPage> {
   RoutePath? route;
 
   final int currentStationIndex = 0;
-  final GlobalKey<StationSummaryPager> summaryPagerKey =
-      GlobalKey<StationSummaryPager>();
+  final GlobalKey<StationPagerState> summaryPagerKey =
+      GlobalKey<StationPagerState>();
 
   @override
   void initState() {
@@ -37,47 +39,51 @@ class _MapPageState extends State<MapPage> {
     final mapSize =
         isMobile
             ? Size(media.size.width, media.size.height - 300)
-            : Size(media.size.width, media.size.height);
-    final overlaySize = isMobile ? Size(media.size.width, 300) : Size(500, 680);
+            : Size(media.size.width - 500, media.size.height);
+    final overlaySize =
+        isMobile ? Size(media.size.width, 300) : Size(500, media.size.height);
     final overlayPositioned =
         isMobile
             ? (Widget child) =>
                 Positioned(left: 0, right: 0, bottom: 0, child: child)
-            : (Widget child) => Positioned(right: 20, top: 20, child: child);
+            : (Widget child) => Positioned(right: 0, top: 0, child: child);
 
     late Widget containerChild;
     if (route == null) {
       containerChild = const SizedBox.shrink();
-    } else if (isMobile) {
-      containerChild = StationSummary(
+    } else {
+      containerChild = StationPager(
         key: summaryPagerKey,
         size: overlaySize,
         route: route!,
-      );
-    } else {
-      containerChild = StationDetail(
-        size: overlaySize,
-        station: route!.station[0],
-        previousName: '이전 정류장',
-        nextName: null,
+        onItemBuilder: (index, station) {
+          final nextStation = route!.station.elementAtOrNull(index + 1)?.name;
+          final previousStation =
+              index > 0 ? route!.station.elementAtOrNull(index - 1)?.name : null;
+          if (isMobile) {
+            return StationSummaryItem(
+              station: station,
+              nextStation: nextStation,
+              onDirectionTap: summaryPagerKey.currentState?.directionTap,
+            );
+          }
+          return StationDetail(
+            station: station,
+            size: overlaySize,
+            nextName: nextStation,
+            previousName: previousStation,
+          );
+        },
       );
     }
 
     final containerShadow = [
       BoxShadow(color: ThemeColor.grey, blurRadius: 4, offset: Offset(0, 4)),
     ];
-    final containerDecoration = !isMobile
-        ? ShapeDecoration(
-            color: Colors.white,
-            shadows: containerShadow,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(40),
-            ),
-          )
-        : BoxDecoration(
-            color: Colors.white,
-            boxShadow: containerShadow,
-          );
+    final containerDecoration = BoxDecoration(
+      color: Colors.white,
+      boxShadow: containerShadow,
+    );
 
     final container = Container(
       decoration: containerDecoration,
