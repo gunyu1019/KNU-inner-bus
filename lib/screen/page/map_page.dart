@@ -71,6 +71,12 @@ class _MapPageState extends State<MapPage> {
             size: overlaySize,
             nextName: nextStation,
             previousName: previousStation,
+            onPreviousClick: () {
+              summaryPagerKey.currentState?.scrollToPage(index - 1);
+            },
+            onNextClick: () {
+              summaryPagerKey.currentState?.scrollToPage(index + 1);
+            },
           );
         },
       );

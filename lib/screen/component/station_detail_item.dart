@@ -12,6 +12,9 @@ class StationDetail extends StatelessWidget {
     required this.station,
     this.previousName,
     this.nextName,
+    this.onPreviousClick,
+    this.onCurrentClick,
+    this.onNextClick,
   });
 
   /// 하나의 페이지를 구성하는 크기입니다.
@@ -21,6 +24,10 @@ class StationDetail extends StatelessWidget {
 
   final String? previousName;
   final String? nextName;
+  
+  final void Function()? onPreviousClick;
+  final void Function()? onCurrentClick;
+  final void Function()? onNextClick;
 
   Widget timetable() {
     final children = <Widget>[
@@ -76,11 +83,15 @@ class StationDetail extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(height: 20.0),
             StationDetailTitle(
               station: station,
               previousName: previousName,
               nextName: nextName,
               size: size,
+              onPreviousClick: onPreviousClick,
+              onCurrentClick: onCurrentClick,
+              onNextClick: onNextClick,
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
