@@ -49,15 +49,14 @@ class StationDetail extends StatelessWidget {
           ),
         )
         .forEach(children.add);
-    if (currentInfo == null ||
-        now.isBefore(DateTime(now.year, now.month, now.day, 5))) {
+    if (currentInfo == null) {
       // 운행이 종료된 경우 (출발 전 배차는 05:00 이후로 간주함.)
       children.add(
         BusInfo(
           index: -1,
           dateTime: now,
           busState: BusState.closed,
-          descriptionFomrat: "운행이 종료되었습니다.",
+          simple: true,
         ),
       );
     }
