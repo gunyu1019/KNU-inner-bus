@@ -44,13 +44,17 @@ class Station {
     this.time,
   ) {
     distance = route.isEmpty ? 0 : route.first.distance(position);
-    _actualRouteDistance = route.length > 1 ?
-        route
-            .sublist(0, route.length - 1)
-            .asMap()
-            .entries
-            .map((element) => element.value.distance(route[element.key + 1]))
-            .toList() : [0, 0];
+    _actualRouteDistance =
+        route.length > 1
+            ? route
+                .sublist(0, route.length - 1)
+                .asMap()
+                .entries
+                .map(
+                  (element) => element.value.distance(route[element.key + 1]),
+                )
+                .toList()
+            : [0, 0];
     actualDistance = _actualRouteDistance.reduce(
       (element1, element2) => element1 + element2,
     );
@@ -97,12 +101,13 @@ class Station {
   /// 만약 운행 시간을 경과하여 운행이 종료된 경우 null을 반환합니다.
   MapEntry<String, DateTime>? nearTimetable([DateTime? compareTime]) {
     final rawCompareTime = compareTime ?? DateTime.now();
-    final entries = time.entries
-        .where((element) => element.value.isAfter(rawCompareTime));
+    final entries = time.entries.where(
+      (element) => element.value.compareTo(rawCompareTime) >= 0,
+    );
     if (entries.isEmpty) {
       return null;
     }
-    return entries.reduce((a, b) => a.value.isBefore(b.value) ? a : b);
+    return entries.reduce((a, b) => a.value.compareTo(b.value) <= 0 ? a : b);
   }
 
   @override
