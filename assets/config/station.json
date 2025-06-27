@@ -703,8 +703,8 @@
         "id": 6,
         "name": "백록관",
         "position": {
-            "latitude": 37.8688247037592,
-            "longitude": 127.74159506006295
+            "latitude": 37.8688313498271,
+            "longitude": 127.74175508365288
         },
         "direction": true
     },
@@ -1089,8 +1089,8 @@
         "id": 6,
         "name": "함인섭광장",
         "position": {
-            "latitude": 37.86860447488516,
-            "longitude": 127.74159073211202
+            "latitude": 37.86856866747583,
+            "longitude": 127.7416217547261
         },
         "direction": false
     },
@@ -1164,8 +1164,8 @@
         "id": 5,
         "name": "미래광장",
         "position": {
-            "latitude": 37.8705029179203,
-            "longitude": 127.74335703851081
+            "latitude": 37.87046326510508,
+            "longitude": 127.74334551295483
         },
         "direction": false
     },
