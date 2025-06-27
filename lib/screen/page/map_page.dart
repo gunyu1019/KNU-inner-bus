@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
@@ -151,6 +150,20 @@ class _MapPageState extends State<MapPage> {
         onClick: () {
           summaryPagerKey.currentState?.scrollToPage(station.$1);
         },
+      );
+    }
+
+    final now = DateTime(2025, 6, 28, 18, 21);
+
+    final busPoiStyle = PoiStyle(
+      icon: KImage.fromAsset("assets/image/bus.png", 30, 36),
+      anchor: KPoint(.5, .5),
+    );
+    final busPosition = route.tracingBusPosition(now);
+    if (busPosition != null) {
+      await controller.labelLayer.addPoi(
+        busPosition,
+        style: busPoiStyle,
       );
     }
 
