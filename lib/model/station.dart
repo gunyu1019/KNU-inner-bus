@@ -101,6 +101,11 @@ class Station {
   /// 만약 운행 시간을 경과하여 운행이 종료된 경우 null을 반환합니다.
   MapEntry<String, DateTime>? nearTimetable([DateTime? compareTime]) {
     final rawCompareTime = compareTime ?? DateTime.now();
+    if (rawCompareTime.hour < 5) {
+      // 05:00 이전에는 운행이 종료된 것으로 간주합니다.
+      return null;
+    }
+
     final entries = time.entries.where(
       (element) => element.value.compareTo(rawCompareTime) >= 0,
     );
