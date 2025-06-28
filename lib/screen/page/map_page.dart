@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/model/route_path.dart';
 import 'package:knu_inner_bus/screen/component/station_summary_item.dart';
 import 'package:knu_inner_bus/screen/component/station_detail_item.dart';
-import 'package:knu_inner_bus/screen/page/station_pager.dart';
+import 'package:knu_inner_bus/screen/component/station_pager.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -19,9 +20,10 @@ class _MapPageState extends State<MapPage> {
   late KakaoMapController? controller;
   RoutePath? route;
 
-  final int currentStationIndex = 0;
   final GlobalKey<StationPagerState> summaryPagerKey =
       GlobalKey<StationPagerState>();
+
+  Offset _dragStartOffset = Offset.zero;
 
   @override
   void initState() {
@@ -79,6 +81,21 @@ class _MapPageState extends State<MapPage> {
             },
           );
         },
+        onVerticalDragStart: (details) {
+          _dragStartOffset = details.localPosition;
+        },
+        onVerticalDragEnd: (details) {
+          final relativeOffset = (_dragStartOffset - details.localPosition);
+          if (relativeOffset.dx.abs() > relativeOffset.dy.abs()) {
+            // 수직으로 드래그가 이루어진 경우 무시합니다.
+            return;
+          }
+
+          if (relativeOffset.dy > 100) {
+            context.push("/detail");
+            return;
+          }
+        }
       );
     }
 
@@ -159,7 +176,7 @@ class _MapPageState extends State<MapPage> {
       );
     }
 
-    final now = DateTime(2025, 6, 28, 18, 21);
+    final now = DateTime.now();
 
     final busPoiStyle = PoiStyle(
       icon: KImage.fromAsset("assets/image/bus.png", 30, 36),
