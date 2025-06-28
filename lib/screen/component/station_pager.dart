@@ -12,6 +12,8 @@ class StationPager extends StatefulWidget {
     required this.size,
     required this.route,
     required this.onItemBuilder,
+    this.onVerticalDragStart,
+    this.onVerticalDragEnd,
   });
 
   /// 하나의 페이지를 구성하는 크기입니다.
@@ -26,6 +28,9 @@ class StationPager extends StatefulWidget {
   State<StationPager> createState() => StationPagerState();
 
   final Widget Function(int, Station) onItemBuilder;
+
+  final void Function(DragStartDetails)? onVerticalDragStart;
+  final void Function(DragEndDetails)? onVerticalDragEnd;
 }
 
 class StationPagerState extends State<StationPager> {
@@ -124,6 +129,8 @@ class StationPagerState extends State<StationPager> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onVerticalDragStart: widget.onVerticalDragStart,
+      onVerticalDragEnd: widget.onVerticalDragEnd,
       onHorizontalDragUpdate: (detail) {
         _currentOffset = _scrollController.offset - detail.delta.dx;
         if (_currentOffset < 0 ||
