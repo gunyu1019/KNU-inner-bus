@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,10 +26,14 @@ class _MapPageState extends State<MapPage> {
       GlobalKey<StationPagerState>();
 
   Offset _dragStartOffset = Offset.zero;
+  String _currentStationName = "";
+  late Poi _busPoi;
+  Timer? _updateTimer;
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    super.dispose();
+    _updateTimer?.cancel();
   }
 
   @override
@@ -65,14 +71,16 @@ class _MapPageState extends State<MapPage> {
             return StationSummaryItem(
               station: station,
               nextStation: nextStation,
+              currentStation: _currentStationName,
               onDirectionTap: summaryPagerKey.currentState?.directionTap,
             );
           }
-          return StationDetail(
+          return StationDetailItem(
             station: station,
             size: overlaySize,
             nextName: nextStation,
             previousName: previousStation,
+            currentStation: _currentStationName,
             onPreviousClick: () {
               summaryPagerKey.currentState?.scrollToPage(index - 1);
             },
@@ -178,21 +186,36 @@ class _MapPageState extends State<MapPage> {
 
     final now = DateTime.now();
 
+    _currentStationName = route.currentBusStation(now)?.name ?? "확인 불가";
     final busPoiStyle = PoiStyle(
       icon: KImage.fromAsset("assets/image/bus.png", 30, 36),
       anchor: KPoint(.5, .5),
     );
     final busPosition = route.tracingBusPosition(now);
     if (busPosition != null) {
-      await controller.labelLayer.addPoi(
+      _busPoi = await controller.labelLayer.addPoi(
         busPosition,
         style: busPoiStyle,
       );
     }
 
+    _updateTimer = Timer.periodic(const Duration(seconds: 30), updateBusLocation);
+
     /* await controller.moveCamera(CameraUpdate.fitMapPoints([
       LatLng(37.87369656276904, 127.74234032102943),
       LatLng(37.86069708242608, 127.74420063715208),
-    ], padding: 10)); Cause Exception in Web */
+    ], padding: 10)); */
+  }
+
+  void updateBusLocation(Timer timer) {
+    final now = DateTime.now();
+    final busPosition = route?.tracingBusPosition(now);
+    if (busPosition != null) {
+      _busPoi.move(busPosition);
+    }
+    setState(() {
+      _currentStationName =
+          route?.currentBusStation(now)?.name ?? "확인 불가";
+    });
   }
 }

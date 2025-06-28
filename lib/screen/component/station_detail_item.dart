@@ -5,8 +5,8 @@ import 'package:knu_inner_bus/model/station.dart';
 import 'package:knu_inner_bus/screen/component/bus_info.dart';
 import 'package:knu_inner_bus/screen/component/station_detail_title.dart';
 
-class StationDetail extends StatelessWidget {
-  const StationDetail({
+class StationDetailItem extends StatelessWidget {
+  const StationDetailItem({
     super.key,
     required this.size,
     required this.station,
@@ -15,6 +15,7 @@ class StationDetail extends StatelessWidget {
     this.onPreviousClick,
     this.onCurrentClick,
     this.onNextClick,
+    this.currentStation,
   });
 
   /// 하나의 페이지를 구성하는 크기입니다.
@@ -24,6 +25,9 @@ class StationDetail extends StatelessWidget {
 
   final String? previousName;
   final String? nextName;
+
+  /// 현재 버스의 위치를 나타냅니다.
+  final String? currentStation;
   
   final void Function()? onPreviousClick;
   final void Function()? onCurrentClick;

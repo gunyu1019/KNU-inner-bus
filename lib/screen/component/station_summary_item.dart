@@ -14,6 +14,7 @@ class StationSummaryItem extends StatelessWidget {
     required this.station,
     this.nextStation,
     this.onDirectionTap,
+    this.currentStation,
   });
 
   /// 정류장 정보를 담고 있는 객체입니다.
@@ -26,6 +27,9 @@ class StationSummaryItem extends StatelessWidget {
   /// 방향을 눌렀을 때 호출되는 콜백 함수입니다.
   /// 이 콜백은 방향을 눌렀을 때, 다른 방향에 있는 정류장으로 이동할 때 사용됩니다.
   final void Function()? onDirectionTap;
+
+  /// 현재 버스의 위치를 나타냅니다.
+  final String? currentStation;
 
   /// 정류장 이름을 표시하는 위젯입니다.
   Widget titleText() => Text(station.name, style: KakaoMapTextStyle.title);
@@ -57,7 +61,7 @@ class StationSummaryItem extends StatelessWidget {
         children: [titleText(), directionText()],
       ),
     );
-    final now = DateTime.now();
+    final now = DateTime(2025, 06, 28, 6, 0);
     final currentInfo = station.nearTimetable(now);
     final children = <Widget>[title];
 
