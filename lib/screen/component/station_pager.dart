@@ -86,7 +86,7 @@ class StationPagerState extends State<StationPager> {
     final currentStation = widget.route.station[currentPage - 1];
 
     if (currentPage >= widget.route.station.length) {
-      scrollToPage(1);
+      scrollToPage(0);
       return;
     }
     final otherStationIndex =
