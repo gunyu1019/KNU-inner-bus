@@ -31,15 +31,13 @@ class _MapPageState extends State<MapPage> {
   late Poi _busPoi;
   Timer? _updateTimer;
 
-  bool isMobile = false;
-
   @override
   void dispose() {
     super.dispose();
     _updateTimer?.cancel();
   }
 
-  Widget pagerItemBuilder(int index, Station station, Size overlaySize) {
+  Widget pagerItemBuilder(int index, Station station, Size overlaySize, bool isMobile) {
     final nextStation = route!.station.elementAtOrNull(index + 1)?.name;
     final previousStation =
         index > 0 ? route!.station.elementAtOrNull(index - 1)?.name : null;
@@ -90,7 +88,7 @@ class _MapPageState extends State<MapPage> {
 
     /// PC, Tablet과 Mobile Device에서 화면 구성은 상이합니다.
     final ratio = media.size.width / media.size.height;
-    isMobile = ratio < 1.0;
+    final isMobile = ratio < 1.0;
     final mapSize =
         isMobile
             ? Size(media.size.width, media.size.height - 300)
@@ -111,7 +109,7 @@ class _MapPageState extends State<MapPage> {
         key: summaryPagerKey,
         size: overlaySize,
         route: route!,
-        onItemBuilder: (e1, e2) => pagerItemBuilder(e1, e2, overlaySize),
+        onItemBuilder: (e1, e2) => pagerItemBuilder(e1, e2, overlaySize, isMobile),
         onVerticalDragStart: isMobile ? onVerticalDragStart : null,
         onVerticalDragEnd: isMobile ? onVerticalDragEnd : null,
       );
