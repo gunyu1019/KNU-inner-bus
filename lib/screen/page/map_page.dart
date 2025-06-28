@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -89,12 +90,18 @@ class _MapPageState extends State<MapPage> {
     /// PC, Tablet과 Mobile Device에서 화면 구성은 상이합니다.
     final ratio = media.size.width / media.size.height;
     final isMobile = ratio < 1.0;
+
+    double sideOverlayWidth = 500;
+    if (!isMobile && media.size.width / 2 < 500) {
+      sideOverlayWidth = max(300, media.size.width / 2);
+    }
+
     final mapSize =
         isMobile
             ? Size(media.size.width, media.size.height - 300)
-            : Size(media.size.width - 500, media.size.height);
+            : Size(media.size.width - sideOverlayWidth, media.size.height);
     final overlaySize =
-        isMobile ? Size(media.size.width, 300) : Size(500, media.size.height);
+        isMobile ? Size(media.size.width, 300) : Size(sideOverlayWidth, media.size.height);
     final overlayPositioned =
         isMobile
             ? (Widget child) =>
