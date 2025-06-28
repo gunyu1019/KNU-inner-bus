@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/model/route_path.dart';
+import 'package:knu_inner_bus/model/station.dart';
 import 'package:knu_inner_bus/screen/component/station_summary_item.dart';
 import 'package:knu_inner_bus/screen/component/station_detail_item.dart';
 import 'package:knu_inner_bus/screen/component/station_pager.dart';
@@ -30,10 +31,57 @@ class _MapPageState extends State<MapPage> {
   late Poi _busPoi;
   Timer? _updateTimer;
 
+  bool isMobile = false;
+
   @override
   void dispose() {
     super.dispose();
     _updateTimer?.cancel();
+  }
+
+  Widget pagerItemBuilder(int index, Station station, Size overlaySize) {
+    final nextStation = route!.station.elementAtOrNull(index + 1)?.name;
+    final previousStation =
+        index > 0 ? route!.station.elementAtOrNull(index - 1)?.name : null;
+    if (isMobile) {
+      return StationSummaryItem(
+        station: station,
+        nextStation: nextStation,
+        currentStation: _currentStationName,
+        onDirectionTap: summaryPagerKey.currentState?.directionTap,
+      );
+    }
+    return StationDetailItem(
+      station: station,
+      size: overlaySize,
+      simple: false,
+      nextName: nextStation,
+      previousName: previousStation,
+      currentStation: _currentStationName,
+      onPreviousClick: () {
+        summaryPagerKey.currentState?.scrollToPage(index - 1);
+      },
+      onNextClick: () {
+        summaryPagerKey.currentState?.scrollToPage(index + 1);
+      },
+    );
+  }
+
+  void onVerticalDragStart(details) {
+    _dragStartOffset = details.localPosition;
+  }
+
+  void onVerticalDragEnd(details) {
+    final relativeOffset = (_dragStartOffset - details.localPosition);
+    if (relativeOffset.dx.abs() > relativeOffset.dy.abs()) {
+      // 수직으로 드래그가 이루어진 경우 무시합니다.
+      return;
+    }
+
+    if (relativeOffset.dy > 100) {
+      context.push("/detail");
+      return;
+    }
   }
 
   @override
@@ -42,7 +90,7 @@ class _MapPageState extends State<MapPage> {
 
     /// PC, Tablet과 Mobile Device에서 화면 구성은 상이합니다.
     final ratio = media.size.width / media.size.height;
-    final isMobile = ratio < 1.0;
+    isMobile = ratio < 1.0;
     final mapSize =
         isMobile
             ? Size(media.size.width, media.size.height - 300)
@@ -63,48 +111,9 @@ class _MapPageState extends State<MapPage> {
         key: summaryPagerKey,
         size: overlaySize,
         route: route!,
-        onItemBuilder: (index, station) {
-          final nextStation = route!.station.elementAtOrNull(index + 1)?.name;
-          final previousStation =
-              index > 0 ? route!.station.elementAtOrNull(index - 1)?.name : null;
-          if (isMobile) {
-            return StationSummaryItem(
-              station: station,
-              nextStation: nextStation,
-              currentStation: _currentStationName,
-              onDirectionTap: summaryPagerKey.currentState?.directionTap,
-            );
-          }
-          return StationDetailItem(
-            station: station,
-            size: overlaySize,
-            simple: false,
-            nextName: nextStation,
-            previousName: previousStation,
-            currentStation: _currentStationName,
-            onPreviousClick: () {
-              summaryPagerKey.currentState?.scrollToPage(index - 1);
-            },
-            onNextClick: () {
-              summaryPagerKey.currentState?.scrollToPage(index + 1);
-            },
-          );
-        },
-        onVerticalDragStart: (details) {
-          _dragStartOffset = details.localPosition;
-        },
-        onVerticalDragEnd: (details) {
-          final relativeOffset = (_dragStartOffset - details.localPosition);
-          if (relativeOffset.dx.abs() > relativeOffset.dy.abs()) {
-            // 수직으로 드래그가 이루어진 경우 무시합니다.
-            return;
-          }
-
-          if (relativeOffset.dy > 100) {
-            context.push("/detail");
-            return;
-          }
-        }
+        onItemBuilder: (e1, e2) => pagerItemBuilder(e1, e2, overlaySize),
+        onVerticalDragStart: isMobile ? onVerticalDragStart : null,
+        onVerticalDragEnd: isMobile ? onVerticalDragEnd : null,
       );
     }
 
@@ -200,7 +209,10 @@ class _MapPageState extends State<MapPage> {
       );
     }
 
-    _updateTimer = Timer.periodic(const Duration(seconds: 30), updateBusLocation);
+    _updateTimer = Timer.periodic(
+      const Duration(seconds: 30),
+      updateBusLocation,
+    );
 
     /* await controller.moveCamera(CameraUpdate.fitMapPoints([
       LatLng(37.87369656276904, 127.74234032102943),
@@ -215,8 +227,7 @@ class _MapPageState extends State<MapPage> {
       _busPoi.move(busPosition);
     }
     setState(() {
-      _currentStationName =
-          route?.currentBusStation(now)?.name ?? "확인 불가";
+      _currentStationName = route?.currentBusStation(now)?.name ?? "확인 불가";
     });
   }
 }
