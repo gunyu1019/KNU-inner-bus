@@ -63,9 +63,6 @@ class _StationDetailPageState extends State<StationDetailPage> {
             );
 
     return GestureDetector(
-      onVerticalDragDown: (DragDownDetails details) {
-        context.pop();
-      },
       child: Container(
         color: ThemeColor.primaryBackgroundColor,
         child: child
