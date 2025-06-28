@@ -61,7 +61,7 @@ class StationSummaryItem extends StatelessWidget {
         children: [titleText(), directionText()],
       ),
     );
-    final now = DateTime(2025, 06, 28, 6, 0);
+    final now = DateTime.now();
     final currentInfo = station.nearTimetable(now);
     final children = <Widget>[title];
 

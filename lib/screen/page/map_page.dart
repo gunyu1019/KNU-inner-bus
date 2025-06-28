@@ -78,6 +78,7 @@ class _MapPageState extends State<MapPage> {
           return StationDetailItem(
             station: station,
             size: overlaySize,
+            simple: false,
             nextName: nextStation,
             previousName: previousStation,
             currentStation: _currentStationName,
