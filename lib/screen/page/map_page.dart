@@ -57,6 +57,12 @@ class _MapPageState extends State<MapPage> {
       nextName: nextStation,
       previousName: previousStation,
       currentStation: _currentStationName,
+      onCurrentClick: () {
+        controller?.moveCamera(CameraUpdate.newCenterPosition(
+          station.position,
+          zoomLevel: 14,
+        ), animation: CameraAnimation(3000));
+      },
       onPreviousClick: () {
         summaryPagerKey.currentState?.scrollToPage(index - 1);
       },
@@ -239,7 +245,7 @@ class _MapPageState extends State<MapPage> {
     } else {
       _busPoi.hide();
     }
-    
+
     setState(() {
       _currentStationName = route?.currentBusStation(now)?.name ?? "확인 불가";
     });

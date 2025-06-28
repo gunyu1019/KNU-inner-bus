@@ -62,11 +62,6 @@ class _StationDetailPageState extends State<StationDetailPage> {
               },
             );
 
-    return GestureDetector(
-      child: Container(
-        color: ThemeColor.primaryBackgroundColor,
-        child: child
-      ),
-    );
+    return Container(color: ThemeColor.primaryBackgroundColor, child: child);
   }
 }
