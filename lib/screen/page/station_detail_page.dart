@@ -47,7 +47,7 @@ class _StationDetailPageState extends State<StationDetailPage> {
                     index > 0
                         ? route!.station.elementAtOrNull(index - 1)?.name
                         : null;
-                return StationDetail(
+                return StationDetailItem(
                   station: station,
                   size: media.size,
                   nextName: nextStation,
