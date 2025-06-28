@@ -10,6 +10,7 @@ class StationDetailItem extends StatelessWidget {
     super.key,
     required this.size,
     required this.station,
+    this.simple = true,
     this.previousName,
     this.nextName,
     this.onPreviousClick,
@@ -21,9 +22,15 @@ class StationDetailItem extends StatelessWidget {
   /// 하나의 페이지를 구성하는 크기입니다.
   final Size size;
 
+  /// 정류장 정보를 담고 있는 객체입니다.
   final Station station;
 
+  final bool simple;
+
+  /// 이전 정류장 이름입니다.
   final String? previousName;
+
+  /// 다음 정류장 이름입니다.
   final String? nextName;
 
   /// 현재 버스의 위치를 나타냅니다.
@@ -67,7 +74,8 @@ class StationDetailItem extends StatelessWidget {
           index: -1,
           dateTime: now,
           busState: BusState.closed,
-          simple: true,
+          simple: simple,
+          descriptionFomrat: "운행이 종료되었습니다.",
         ),
       );
     }
