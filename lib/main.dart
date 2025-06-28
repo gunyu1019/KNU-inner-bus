@@ -10,23 +10,40 @@ void main() async {
   runApp(const MyApp());
 }
 
-final route = GoRouter(routes: [
-  ShellRoute(
-    builder: (context, state, widget) => Scaffold(body: widget),
-    routes: [
-      GoRoute(path: "/", builder: (_, _) => MapPage()),
-      GoRoute(path: "/detail", builder: (_, _) => StationDetailPage()),
-    ]
+AnimatedWidget _slideTransition(_, animation, __, child) => SlideTransition(
+  position: animation.drive(
+    Tween<Offset>(
+      begin: Offset(0.0, 1.25),
+      end: Offset.zero,
+    ).chain(CurveTween(curve: Curves.easeInOut)),
   ),
-]);
+  child: child,
+);
+
+final route = GoRouter(
+  routes: [
+    ShellRoute(
+      builder: (context, state, widget) => Scaffold(body: widget),
+      routes: [
+        GoRoute(path: "/", builder: (_, _) => MapPage()),
+        GoRoute(
+          path: "/detail",
+          pageBuilder:
+              (_, _) => CustomTransitionPage(
+                child: StationDetailPage(),
+                transitionsBuilder: _slideTransition,
+              ),
+        ),
+      ],
+    ),
+  ],
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: route
-    );
+    return MaterialApp.router(routerConfig: route);
   }
 }
