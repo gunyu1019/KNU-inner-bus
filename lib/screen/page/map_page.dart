@@ -207,11 +207,16 @@ class _MapPageState extends State<MapPage> {
       anchor: KPoint(.5, .5),
     );
     final busPosition = route.tracingBusPosition(now);
+    _busPoi = await controller.labelLayer.addPoi(
+      busPosition ?? LatLng(37.868471010792305, 127.74478109028253),
+      style: busPoiStyle,
+      visible: false,
+    );
     if (busPosition != null) {
-      _busPoi = await controller.labelLayer.addPoi(
-        busPosition,
-        style: busPoiStyle,
-      );
+      _busPoi.move(busPosition);
+      _busPoi.show();
+    } else {
+      _busPoi.hide();
     }
 
     _updateTimer = Timer.periodic(
@@ -230,7 +235,11 @@ class _MapPageState extends State<MapPage> {
     final busPosition = route?.tracingBusPosition(now);
     if (busPosition != null) {
       _busPoi.move(busPosition);
+      _busPoi.show();
+    } else {
+      _busPoi.hide();
     }
+    
     setState(() {
       _currentStationName = route?.currentBusStation(now)?.name ?? "확인 불가";
     });
