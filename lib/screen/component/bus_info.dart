@@ -85,7 +85,7 @@ class BusInfo extends StatelessWidget {
   /// 버스 상태에 따른 위젯의 패딩을 반환합니다.
   EdgeInsets get padding => switch (busState) {
     BusState.closed => EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-    BusState.current => EdgeInsets.all(18),
+    BusState.current => EdgeInsets.symmetric(horizontal: 18, vertical: 12),
     BusState.previous => EdgeInsets.fromLTRB(20, 8, 16, 8),
     BusState.next => EdgeInsets.fromLTRB(20, 8, 16, 8),
   };
