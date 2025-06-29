@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/model/route_path.dart';
 import 'package:knu_inner_bus/screen/component/station_detail_item.dart';

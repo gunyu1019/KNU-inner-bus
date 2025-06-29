@@ -9,6 +9,7 @@ import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:knu_inner_bus/constant/color.dart';
 import 'package:knu_inner_bus/model/route_path.dart';
 import 'package:knu_inner_bus/model/station.dart';
+import 'package:knu_inner_bus/screen/component/floating_button.dart';
 import 'package:knu_inner_bus/screen/component/station_summary_item.dart';
 import 'package:knu_inner_bus/screen/component/station_detail_item.dart';
 import 'package:knu_inner_bus/screen/component/station_pager.dart';
@@ -38,7 +39,12 @@ class _MapPageState extends State<MapPage> {
     _updateTimer?.cancel();
   }
 
-  Widget pagerItemBuilder(int index, Station station, Size overlaySize, bool isMobile) {
+  Widget pagerItemBuilder(
+    int index,
+    Station station,
+    Size overlaySize,
+    bool isMobile,
+  ) {
     final nextStation = route!.station.elementAtOrNull(index + 1)?.name;
     final previousStation =
         index > 0 ? route!.station.elementAtOrNull(index - 1)?.name : null;
@@ -58,10 +64,10 @@ class _MapPageState extends State<MapPage> {
       previousName: previousStation,
       currentStation: _currentStationName,
       onCurrentClick: () {
-        controller?.moveCamera(CameraUpdate.newCenterPosition(
-          station.position,
-          zoomLevel: 14,
-        ), animation: CameraAnimation(3000));
+        controller?.moveCamera(
+          CameraUpdate.newCenterPosition(station.position, zoomLevel: 14),
+          animation: CameraAnimation(3000),
+        );
       },
       onPreviousClick: () {
         summaryPagerKey.currentState?.scrollToPage(index - 1);
@@ -107,7 +113,9 @@ class _MapPageState extends State<MapPage> {
             ? Size(media.size.width, media.size.height - 300)
             : Size(media.size.width - sideOverlayWidth, media.size.height);
     final overlaySize =
-        isMobile ? Size(media.size.width, 300) : Size(sideOverlayWidth, media.size.height);
+        isMobile
+            ? Size(media.size.width, 300)
+            : Size(sideOverlayWidth, media.size.height);
     final overlayPositioned =
         isMobile
             ? (Widget child) =>
@@ -122,7 +130,8 @@ class _MapPageState extends State<MapPage> {
         key: summaryPagerKey,
         size: overlaySize,
         route: route!,
-        onItemBuilder: (e1, e2) => pagerItemBuilder(e1, e2, overlaySize, isMobile),
+        onItemBuilder:
+            (e1, e2) => pagerItemBuilder(e1, e2, overlaySize, isMobile),
         onVerticalDragStart: isMobile ? onVerticalDragStart : null,
         onVerticalDragEnd: isMobile ? onVerticalDragEnd : null,
       );
@@ -146,15 +155,31 @@ class _MapPageState extends State<MapPage> {
     final option = KakaoMapOption(
       position: LatLng(37.868471010792305, 127.74478109028253),
     );
-    return Stack(
-      children: [
+    
+    final children = <Widget>[
         SizedBox(
           height: mapSize.height,
           width: mapSize.width,
           child: KakaoMap(option: option, onMapReady: onMapReady),
         ),
         overlayPositioned(container),
-      ],
+    ];
+    if (isMobile) {
+      children.add(
+        Positioned(
+          bottom: 20,
+          right: 20,
+          child: FloatingButton(
+            icon: FaIcon(FontAwesomeIcons.mapLocationDot, color: Colors.white),
+            onPressed: () {
+              // TODO()
+            },
+          ),
+        )
+      );
+    }
+    return Stack(
+      children: children,
     );
   }
 
