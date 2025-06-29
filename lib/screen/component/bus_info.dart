@@ -13,7 +13,7 @@ class BusInfo extends StatelessWidget {
     this.simple = false,
     this.isLast = false,
     this.currentStation,
-    this.descriptionFomrat = '{MM}분 후 도착 예정 {CURRENT_STATION}',
+    this.descriptionFomrat = '{MM}분 후 도착 예정 ({CURRENT_STATION})',
   });
 
   /// 버스의 운행 회차를 의미합니다.

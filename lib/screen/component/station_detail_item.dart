@@ -62,7 +62,7 @@ class StationDetailItem extends StatelessWidget {
                     : (timetable.value.isBefore(now) || currentInfo == null
                         ? BusState.previous
                         : BusState.next),
-            simple: true,
+            simple: simple,
             index: int.parse(timetable.key),
           ),
         )
