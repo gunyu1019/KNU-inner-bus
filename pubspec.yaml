@@ -30,6 +30,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/config/station.json
+    - assets/config/.env
     - assets/image/station.svg
     - assets/image/station.png
     - assets/image/bus.svg
